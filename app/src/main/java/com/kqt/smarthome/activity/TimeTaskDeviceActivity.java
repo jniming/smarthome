@@ -10,15 +10,24 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.accloud.cloudservice.AC;
+import com.accloud.cloudservice.VoidCallback;
+import com.accloud.service.ACDeviceMsg;
+import com.accloud.service.ACException;
 import com.kqt.smarthome.R;
+import com.kqt.smarthome.entity.BoxMainSwitch;
+import com.kqt.smarthome.entity.BoxShuntSwitch;
+import com.kqt.smarthome.util.Config;
+import com.kqt.smarthome.util.Ttoast;
+import com.kqt.smarthome.util.Util;
 
 
 public class TimeTaskDeviceActivity extends BaseActivity implements
         OnClickListener {
-
     private FrameLayout timetask_layout, type, aciton;
     private TextView way, type_t, action_t;
     public int TYPECODE = 20;
+    private int typeId = 0;
 
     private Handler handler = new Handler() {
         @Override
@@ -45,7 +54,6 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
         way = (TextView) findViewById(R.id.time_way);
         type_t = (TextView) findViewById(R.id.timetask_type_info);
         action_t = (TextView) findViewById(R.id.time_action_text);
-
         timetask_layout.setOnClickListener(this);
         type.setOnClickListener(this);
         aciton.setOnClickListener(this);
@@ -55,16 +63,66 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
 
     @Override
     public void viewEvent(TitleBar titleBar, View v) {
+        if (titleBar == TitleBar.RIGHT) {
+            String name = Util.GetUser(this).getName();
+            String timePoint = "";
+            String timeCycle = "";
+            if (timePoint.isEmpty()) {
+                Ttoast.show(this, "时间未选定");
+                return;
+            } else if (timeCycle.isEmpty()) {
+                Ttoast.show(this, "循环方式未指定");
+                return;
+            }
+            ACDeviceMsg msg = new ACDeviceMsg();
+            msg.setCode(100);
+            if (typeId == Config.leakageProtection) {  //漏保
+                BoxMainSwitch boxMainSwitch = new BoxMainSwitch(this);
+                msg.setContent(boxMainSwitch);
+            } else if (typeId == Config.splitter) {    //分路
+                BoxShuntSwitch boxShuntSwitch = new BoxShuntSwitch(this);
+                msg.setContent(boxShuntSwitch);
 
+            }
+            createTimeTask(name, timePoint, timeCycle, msg);
 
-        back();
+        } else {
+
+            back();
+        }
     }
+
+    /**
+     * 创建定时任务
+     */
+    private void createTimeTask(String name, String timePoint, String timeCycle, ACDeviceMsg msg) {
+        String deviceId = BoxSettingActivity.device.getDeviceid() + "";
+        long id = 0;
+        //注:这里与文档有些许不同
+        AC.timerMgr().addTask(id, deviceId, name, timePoint, timeCycle, msg, new VoidCallback() {
+            @Override
+            public void success() {
+                Ttoast.show(TimeTaskDeviceActivity.this, "添加成功");
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void error(ACException e) {
+                Ttoast.show(TimeTaskDeviceActivity.this, "添加失败");
+                finish();
+            }
+        });
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == TYPECODE && resultCode == Activity.RESULT_OK) {
             String info = data.getStringExtra("infomation");
+            typeId = data.getIntExtra("typei", 0);
             Message msg = handler.obtainMessage();
             msg.what = 0;
             msg.obj = info;

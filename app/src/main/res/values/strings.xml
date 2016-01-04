@@ -60,6 +60,7 @@
     <string name="alarmPushFlag">报警事件是否推送</string>
     <string name="operationPushFlag">操作事件是否推送</string>
     <string name="operationLock">控制锁</string>
-    
-    
+    <string name="time_task_list_title">任务列表</string>
+
+
 </resources>

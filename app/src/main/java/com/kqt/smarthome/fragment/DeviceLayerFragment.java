@@ -176,6 +176,8 @@ public class DeviceLayerFragment extends LazyFragment implements
 		boolean flg = false;
 
 		if (device.getdType() == Config.BOX_TYPE) {
+
+
 			AC.bindMgr().unbindGateway(Config.SUBDOMAIN, device.getDeviceid(),
 					new VoidCallback() {
 

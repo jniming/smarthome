@@ -14,7 +14,7 @@ import com.kqt.smarthome.R;
 import com.kqt.smarthome.activity.BoxPowerValueActivity;
 import com.kqt.smarthome.activity.SettingBoxNameActivity;
 import com.kqt.smarthome.activity.SettingBoxShareActivity;
-import com.kqt.smarthome.activity.TimeTaskDeviceActivity;
+import com.kqt.smarthome.activity.TimeTaskListActivity;
 import com.kqt.smarthome.entity.Device;
 
 import java.util.HashMap;
@@ -89,7 +89,7 @@ public class BoxSettingAdpter extends BaseAdapter {
 
 					break;
 				case 2: // 定时任务
-					intent = new Intent(context, TimeTaskDeviceActivity.class);
+					intent = new Intent(context, TimeTaskListActivity.class);
 					context.startActivity(intent);
 					break;
 				case 3: // 报警管理
