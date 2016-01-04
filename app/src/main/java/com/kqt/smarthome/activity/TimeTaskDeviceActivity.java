@@ -28,6 +28,7 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
     private TextView way, type_t, action_t;
     public int TYPECODE = 20;
     private int typeId = 0;
+    private int CYCLE = 30;
 
     private Handler handler = new Handler() {
         @Override
@@ -137,7 +138,9 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
             intent.setClass(this, TimeTaskSettingTypeActivity.class);
             startActivityForResult(intent, TYPECODE);
         } else if (v.getId() == timetask_layout.getId()) {
-
+            Intent intent = new Intent();
+            intent.setClass(this, TimeTaskSettingCycleActivity.class);
+            startActivityForResult(intent, CYCLE);
 
         } else if (v.getId() == aciton.getId()) {
 
