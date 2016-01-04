@@ -1,9 +1,5 @@
 package com.kqt.smarthome.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.Context;
 
 import com.accloud.cloudservice.AC;
@@ -12,6 +8,10 @@ import com.accloud.service.ACDeviceMsg;
 import com.accloud.service.ACMsg;
 import com.accloud.utils.PreferencesUtils;
 import com.kqt.smarthome.util.Config;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class BoxManager {
 
@@ -159,6 +159,24 @@ public class BoxManager {
 	}
 
 	/**
+	 * 查询漏电保护器分路信息
+	 * @param deviceId
+	 * @param lineNum
+	 * @param callback
+	 */
+	public void queryLeakProtectStateInfo(long deviceId, int lineNum,
+			PayloadCallback<ACMsg> callback) {
+		ACMsg acMsg = new ACMsg();
+		acMsg = ACMsg.getACMsg(Config.MajorDomain);
+		acMsg.setName("queryLeakProtectStateInfo");
+		acMsg.put("deviceId", deviceId);
+		acMsg.put("lineNum", lineNum);
+		AC.sendToService(Config.SUBDOMAIN, Config.SERVICENAME, 1, acMsg,
+				callback);
+
+	}
+
+	/**
 	 * 修改分路名称
 	 * 
 	 * @param deviceId
@@ -171,6 +189,26 @@ public class BoxManager {
 		ACMsg acMsg = new ACMsg();
 		acMsg = ACMsg.getACMsg(Config.MajorDomain);
 		acMsg.setName("modifyChannelDivideLineName");
+		acMsg.put("deviceId", deviceId);
+		acMsg.put("lineNum", lineNum);
+		acMsg.put("lineName", lineName);
+		AC.sendToService(Config.SUBDOMAIN, Config.SERVICENAME, 1, acMsg,
+				callback);
+
+	}
+
+	/**
+	 * 修改漏保分路名称
+	 * @param deviceId
+	 * @param lineNum
+	 * @param lineName
+	 * @param callback
+	 */
+	public void modifyLeakProtectionLineName(long deviceId, int lineNum,
+			String lineName, PayloadCallback<ACMsg> callback) {
+		ACMsg acMsg = new ACMsg();
+		acMsg = ACMsg.getACMsg(Config.MajorDomain);
+		acMsg.setName("modifyLeakProtectionLineName");
 		acMsg.put("deviceId", deviceId);
 		acMsg.put("lineNum", lineNum);
 		acMsg.put("lineName", lineName);

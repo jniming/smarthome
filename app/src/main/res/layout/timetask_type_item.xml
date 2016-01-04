@@ -22,7 +22,8 @@
             android:textSize="16sp" />
 
         <LinearLayout
-            android:id="@+id/timetask_lb_ischose"
+            android:visibility="gone"
+            android:id="@+id/timetask_item_ischose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

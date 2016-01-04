@@ -1,8 +1,5 @@
 package com.kqt.smarthome.adpter;
 
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -17,15 +14,11 @@ import com.kqt.smarthome.R;
 import com.kqt.smarthome.activity.BoxPowerValueActivity;
 import com.kqt.smarthome.activity.SettingBoxNameActivity;
 import com.kqt.smarthome.activity.SettingBoxShareActivity;
-import com.kqt.smarthome.activity.SettingIpcAlarmActivity;
-import com.kqt.smarthome.activity.SettingIpcAPActivity;
-import com.kqt.smarthome.activity.SettingIpcFTPActivity;
-import com.kqt.smarthome.activity.SettingIpcNameActivity;
-import com.kqt.smarthome.activity.SettingIpcTimeActivity;
-import com.kqt.smarthome.activity.SettingIpcUserActivity;
-import com.kqt.smarthome.activity.SettingIpcWiFiActivity;
+import com.kqt.smarthome.activity.TimeTaskDeviceActivity;
 import com.kqt.smarthome.entity.Device;
-import com.kqt.smarthome.entity.IpcDevice;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class BoxSettingAdpter extends BaseAdapter {
 
@@ -96,6 +89,8 @@ public class BoxSettingAdpter extends BaseAdapter {
 
 					break;
 				case 2: // 定时任务
+					intent = new Intent(context, TimeTaskDeviceActivity.class);
+					context.startActivity(intent);
 					break;
 				case 3: // 报警管理
 					break;

@@ -1,9 +1,5 @@
 package com.kqt.smarthome.activity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,15 +17,17 @@ import com.accloud.service.ACException;
 import com.accloud.service.ACMsg;
 import com.accloud.service.ACObject;
 import com.kqt.smarthome.R;
-import com.kqt.smarthome.adpter.ExpandableListViewAdapter;
 import com.kqt.smarthome.adpter.ExpandableListViewAdapter_1;
 import com.kqt.smarthome.entity.BoxManager;
 import com.kqt.smarthome.entity.BoxShuntSwitch;
 import com.kqt.smarthome.view.CustomDialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Box_main_switchActivity extends BaseActivity {
 
-	private List<BoxShuntSwitch> list = new ArrayList<BoxShuntSwitch>();
+	private List<BoxShuntSwitch> list = new ArrayList<>();
 	private ExpandableListView expandableListView;
 	private ExpandableListViewAdapter_1 expandableListAdapter_1;
 	private Handler handler = new Handler() {
@@ -92,7 +90,7 @@ public class Box_main_switchActivity extends BaseActivity {
 										// 改名
 										BoxManager
 												.getintence()
-												.modifyChannelDivideLineName(
+												.modifyLeakProtectionLineName(
 														boxShuntSwitch
 																.getDeviceId(),
 														position + 1,
@@ -148,11 +146,11 @@ public class Box_main_switchActivity extends BaseActivity {
 	/**
 	 * 查询分路信息
 	 *
-	 * @param deviceId
+	 * @param
 	 */
 	public void queryShuntData(long deviceId) {
 		// 查询
-		BoxManager.getintence().queryChannelDivideStateInfo(deviceId, 0,
+		BoxManager.getintence().queryLeakProtectStateInfo(deviceId, 0,
 				new PayloadCallback<ACMsg>() {
 
 					@Override

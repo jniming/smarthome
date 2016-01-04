@@ -15,6 +15,7 @@
     <color name="red">#CD2E15</color>
     <color name="gray_2">#9B9A9A</color>
     <color name="gree">#0CFA34</color>
+    <color name="timetask_item_bgco">#FF797979</color>
 
     <!-- zing 全部颜色样式 -->
     <color name="result_view">#b0000000</color>
