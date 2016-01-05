@@ -217,7 +217,8 @@
             android:textColor="@color/back"
             android:textSize="16sp"/>
 
-        <LinearLayout  android:id="@+id/time_task_cycle_week_lt"
+        <LinearLayout
+            android:id="@+id/time_task_cycle_week_lt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -227,16 +228,17 @@
             >
 
             <TextView
+                android:id="@+id/week_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
                 android:text="周五"/>
-
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/index_arrow"/>
+                android:src="@drawable/chose"/>
         </LinearLayout>
     </FrameLayout>
 

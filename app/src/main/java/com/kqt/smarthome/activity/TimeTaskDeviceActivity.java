@@ -29,18 +29,7 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
     public int TYPECODE = 20;
     private int typeId = 0;
     private int CYCLE = 30;
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 1) {
-                String info = (String) msg.obj;
-                type_t.setText(info);
-            }
-
-        }
-    };
+    private int MSGCODE = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +37,7 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.time_task_acitivity);
         setTitle("定时任务");
-        setNaView(R.drawable.left_back, "", 0, "", 0, "", 0, "完成");
+        setNaView(R.drawable.left_back, "", 0, "", 0, "", R.drawable.right_finsh_selector, "");
         timetask_layout = (FrameLayout) findViewById(R.id.timetask_layout);
         type = (FrameLayout) findViewById(R.id.time_type_layout);
         aciton = (FrameLayout) findViewById(R.id.time_action_layout);
@@ -60,6 +49,34 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
         aciton.setOnClickListener(this);
 
 
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                String info = (String) msg.obj;
+                type_t.setText(info);
+            } else if (msg.what == 3) {
+                String cycle = (String) msg.obj;
+                way.setText(cycle);
+
+            } else if (msg.what == 5) {
+                String ms = (String) msg.obj;
+                action_t.setText(ms);
+
+            }
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeMessages(1);
+        handler.removeMessages(3);
+        handler.removeMessages(5);
     }
 
     @Override
@@ -123,11 +140,24 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == TYPECODE && resultCode == Activity.RESULT_OK) {
             String info = data.getStringExtra("infomation");
-            typeId = data.getIntExtra("typei", 0);
             Message msg = handler.obtainMessage();
-            msg.what = 0;
+            msg.what = 1;
             msg.obj = info;
             handler.sendMessage(msg);
+        } else if (requestCode == CYCLE && resultCode == Activity.RESULT_OK) {
+            String cycle = data.getStringExtra("timeCycle");
+            Message msg = handler.obtainMessage();
+            msg.what = 3;
+            msg.obj = cycle;
+            handler.sendMessage(msg);
+        } else if (requestCode == MSGCODE && resultCode == Activity.RESULT_OK) {
+            String cycle = data.getStringExtra("command");
+            Message msg = handler.obtainMessage();
+            msg.what = 5;
+            msg.obj = cycle;
+            handler.sendMessage(msg);
+
+
         }
     }
 
@@ -143,7 +173,9 @@ public class TimeTaskDeviceActivity extends BaseActivity implements
             startActivityForResult(intent, CYCLE);
 
         } else if (v.getId() == aciton.getId()) {
-
+            Intent intent = new Intent();
+            intent.setClass(this, TimeTaskSettingMsgActivity.class);
+            startActivityForResult(intent, MSGCODE);
         }
     }
 }

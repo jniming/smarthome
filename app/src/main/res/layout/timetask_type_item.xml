@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:gravity="center_vertical"
-    android:orientation="horizontal" >
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp" >
+        android:background="@drawable/time_task_item_bg"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/timetask_item_text"
@@ -19,10 +19,9 @@
             android:layout_marginLeft="5dp"
             android:text="漏电保护器"
             android:textColor="@color/back"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/timetask_item_ischose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,13 +29,14 @@
             android:layout_marginRight="5dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:visibility="gone"
             >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/chose" />
+                android:src="@drawable/chose"/>
         </LinearLayout>
     </FrameLayout>
 

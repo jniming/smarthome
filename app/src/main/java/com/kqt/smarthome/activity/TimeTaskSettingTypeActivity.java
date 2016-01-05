@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,12 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.accloud.cloudservice.PayloadCallback;
-import com.accloud.service.ACException;
-import com.accloud.service.ACMsg;
-import com.accloud.service.ACObject;
 import com.kqt.smarthome.R;
-import com.kqt.smarthome.entity.BoxManager;
+import com.kqt.smarthome.util.Ttoast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +56,7 @@ public class TimeTaskSettingTypeActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timetask_setting_type);
         setTitle("设备选择");
-        setNaView(R.drawable.left_back, "", 0, "", 0, "", 0, "完成");
+        setNaView(R.drawable.left_back, "", 0, "", 0, "", R.drawable.right_finsh_selector, "");
         lb = (FrameLayout) findViewById(R.id.timetask_lb_layout);
         fl = (FrameLayout) findViewById(R.id.timetask_fl_layout);
         lc = (LinearLayout) findViewById(R.id.timetask_lb_ischose);
@@ -79,9 +74,12 @@ public class TimeTaskSettingTypeActivity extends BaseActivity implements
     public void viewEvent(TitleBar titleBar, View v) {
         if (titleBar == TitleBar.RIGHT) {
             String linname = "";
+            boolean check = true;
+
             for (int i = 0; i < itemchose.length; i++) {
                 if (itemchose[i]) {
                     linname = (String) list.get(i).get("name");
+                    check = false;
                 }
             }
 
@@ -90,6 +88,10 @@ public class TimeTaskSettingTypeActivity extends BaseActivity implements
                 intent.putExtra("infomation", "漏电保护器-" + linname);
             } else
                 intent.putExtra("infomation", "智能分路器-" + linname);
+            if (check) {
+                Ttoast.show(this, "请选择线路");
+                return;
+            }
             setResult(Activity.RESULT_OK, intent);
             back();
         } else {
@@ -182,31 +184,40 @@ public class TimeTaskSettingTypeActivity extends BaseActivity implements
 
     private void queryLeakPower() {
         list.clear();
-        BoxManager.getintence().queryLeakProtectStateInfo(BoxSettingActivity.device.getDeviceid(), 0,
-                new PayloadCallback<ACMsg>() {
-                    @Override
-                    public void error(ACException arg0) {
-                        Log.d("error", arg0.getErrorCode() + "");
-                    }
-
-                    @Override
-                    public void success(ACMsg arg0) {
-                        ACObject acObject = arg0.get("stateInfo");
-                        long deviceId = acObject.getLong("deviceId");
-                        List<ACObject> list_ac = acObject.getList("value");
-                        itemchose = new boolean[list_ac.size()];
-                        for (int i = 0; i < list_ac.size(); i++) {
-                            HashMap<String, Object> map = new HashMap<String, Object>();
-                            ACObject li = list_ac.get(i);
-                            String lineName = li.getString("lineName");
-                            map.put("name", lineName);
-                            itemchose[i] = false;
-                            list.add(map);
-                        }
-                        hanlder.sendEmptyMessage(1);
-
-                    }
-                });
+        itemchose = new boolean[5];
+        for (int i = 0; i < 6; i++) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("name", "线路" + i);
+            itemchose[i] = false;
+            list.add(map);
+        }
+        hanlder.sendEmptyMessage(1);
+//************************************下面为远端获取的线路列表*****************************//
+//        BoxManager.getintence().queryLeakProtectStateInfo(BoxSettingActivity.device.getDeviceid(), 0,
+//                new PayloadCallback<ACMsg>() {
+//                    @Override
+//                    public void error(ACException arg0) {
+//                        Log.d("error", arg0.getErrorCode() + "");
+//                    }
+//
+//                    @Override
+//                    public void success(ACMsg arg0) {
+//                        ACObject acObject = arg0.get("stateInfo");
+//                        long deviceId = acObject.getLong("deviceId");
+//                        List<ACObject> list_ac = acObject.getList("value");
+//                        itemchose = new boolean[list_ac.size()];
+//                        for (int i = 0; i < list_ac.size(); i++) {
+//                            HashMap<String, Object> map = new HashMap<String, Object>();
+//                            ACObject li = list_ac.get(i);
+//                            String lineName = li.getString("lineName");
+//                            map.put("name", lineName);
+//                            itemchose[i] = false;
+//                            list.add(map);
+//                        }
+//                        hanlder.sendEmptyMessage(1);
+//
+//                    }
+//                });
 
     }
 
@@ -216,30 +227,41 @@ public class TimeTaskSettingTypeActivity extends BaseActivity implements
      */
     private void queryChannelPower() {
         list.clear();
-        BoxManager.getintence().queryChannelDivideStateInfo(BoxSettingActivity.device.getDeviceid(), 0,
-                new PayloadCallback<ACMsg>() {
-                    @Override
-                    public void error(ACException arg0) {
-                        Log.d("error", arg0.getErrorCode() + "");
-                    }
+        itemchose = new boolean[5];
+        for (int i = 0; i < 5; i++) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("name", "线路" + i);
+            itemchose[i] = false;
+            list.add(map);
+        }
+        hanlder.sendEmptyMessage(1);
 
-                    @Override
-                    public void success(ACMsg arg0) {
-                        ACObject acObject = arg0.get("stateInfo");
-                        long deviceId = acObject.getLong("deviceId");
-                        List<ACObject> list_ac = acObject.getList("value");
-                        itemchose = new boolean[list_ac.size()];
-                        for (int i = 0; i < list_ac.size(); i++) {
-                            HashMap<String, Object> map = new HashMap<String, Object>();
-                            ACObject li = list_ac.get(i);
-                            String lineName = li.getString("lineName");
-                            map.put("name", lineName);
-                            itemchose[i] = false;
-                            list.add(map);
-                        }
-                        hanlder.sendEmptyMessage(1);
-                    }
-                });
+
+//
+//        BoxManager.getintence().queryChannelDivideStateInfo(BoxSettingActivity.device.getDeviceid(), 0,
+//                new PayloadCallback<ACMsg>() {
+//                    @Override
+//                    public void error(ACException arg0) {
+//                        Log.d("error", arg0.getErrorCode() + "");
+//                    }
+//
+//                    @Override
+//                    public void success(ACMsg arg0) {
+//                        ACObject acObject = arg0.get("stateInfo");
+//                        long deviceId = acObject.getLong("deviceId");
+//                        List<ACObject> list_ac = acObject.getList("value");
+//                        itemchose = new boolean[list_ac.size()];
+//                        for (int i = 0; i < list_ac.size(); i++) {
+//                            HashMap<String, Object> map = new HashMap<String, Object>();
+//                            ACObject li = list_ac.get(i);
+//                            String lineName = li.getString("lineName");
+//                            map.put("name", lineName);
+//                            itemchose[i] = false;
+//                            list.add(map);
+//                        }
+//                        hanlder.sendEmptyMessage(1);
+//                    }
+//                });
     }
 
 
